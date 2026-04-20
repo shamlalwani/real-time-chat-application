@@ -35,5 +35,5 @@ To run this project, you need **Node.js** and the following dependencies:
 2. **Google Cloud Credentials:**
      Download your Service Account Key from the Google Cloud Console.
      Save it as key.json in the project's root directory.
-3.** Project Configuration:**
+3.  **Project Configuration:**
      Open server.js and ensure the PROJECT_ID variable matches your Dialogflow agent ID.
