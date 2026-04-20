@@ -37,3 +37,7 @@ To run this project, you need **Node.js** and the following dependencies:
      Save it as key.json in the project's root directory.
 3.  **Project Configuration:**
      Open server.js and ensure the PROJECT_ID variable matches your Dialogflow agent ID.
+
+
+
+⚠️ Security Note: The key.json file is excluded from this repository for security reasons. To run this project locally, you must place your own Google Cloud Service Account key in the root directory and name it key.json.
