@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Real-time Chat App</title>
+  <style>
+    /* Basic styling for a clean, modern chat interface */
+    body { font-family: sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .chat-container { width: 400px; height: 500px; background: #fff; border-radius: 10px; display: flex; flex-direction: column; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; }
+    .chat-box { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; }
+    
+    /* Distinguishing between User (sent) and Bot (received) messages */
+    .message { padding: 10px; margin: 5px 0; border-radius: 15px; max-width: 80%; font-size: 14px; }
+    .sent { background: #007bff; color: white; align-self: flex-end; }
+    .received { background: #e4e6eb; color: black; align-self: flex-start; }
+    
+    .input-area { display: flex; padding: 10px; border-top: 1px solid #eee; }
+    input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; }
+    button { margin-left: 5px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div id="chatBox" class="chat-box"></div>
+    
+    <div class="input-area">
+      <input id="messageInput" type="text" placeholder="Type a message..." autocomplete="off">
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // 1. Establish a WebSocket connection to the Node.js server
+    const socket = new WebSocket("ws://localhost:3000"); 
+    const chatBox = document.getElementById("chatBox");
+    const input = document.getElementById("messageInput");
+
+    // 2. Handle incoming messages from the Bot (Server)
+    socket.onmessage = (event) => {
+      addMessage(event.data, "received");
+    };
+
+    // 3. Logic to send message to the Server
+    function sendMessage() {
+      const text = input.value.trim();
+      
+      // Ensure there is text and the connection is active before sending
+      if (!text || socket.readyState !== WebSocket.OPEN) return;
+      
+      socket.send(text);       // Send plain text to server.js
+      addMessage(text, "sent"); // Show user's message in the UI
+      input.value = "";        // Clear input field
+    }
+
+    /**
+     * UI Helper: Adds a message bubble to the chat box
+     * @param {string} text - The message content
+     * @param {string} type - 'sent' (User) or 'received' (Bot)
+     */
+    function addMessage(text, type) {
+      const msg = document.createElement("div");
+      msg.className = `message ${type}`;
+      msg.innerText = text;
+      chatBox.appendChild(msg);
+      
+      // Auto-scroll to the bottom so the latest message is always visible
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Event Listeners for Send Button and 'Enter' key
+    document.getElementById("sendBtn").onclick = sendMessage;
+    input.onkeypress = (e) => { 
+      if (e.key === "Enter") sendMessage(); 
+    };
+  </script>
+</body>
+</html>

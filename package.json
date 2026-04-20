@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@google-cloud/dialogflow": "^7.5.0",
+    "axios": "^1.15.0",
+    "express": "^5.2.1",
+    "google-auth-library": "^10.6.2",
+    "uuid": "^13.0.0",
+    "ws": "^8.20.0"
+  }
+}
